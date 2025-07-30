@@ -7,7 +7,7 @@ from utils import compactar_data_json
 from datetime import datetime
 import json
 
-# 🔒 Esconde elementos do Streamlit (menu, rodapé, cabeçalho)
+# 🔒 Remove elementos padrão do Streamlit
 st.markdown("""
     <style>
         #MainMenu {visibility: hidden;}
@@ -16,7 +16,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ✅ Cabeçalho personalizado do dashboard
+# 🖼️ Adiciona logotipo no topo
+st.image("assets/logo.png", use_column_width=True)
+
+# 🧠 Título centralizado e estilizado
 st.markdown("""
     <h1 style='text-align: center; color: #00CED1; font-family: Arial; margin-bottom: 20px;'>
         XRP Dashboard 💸📈
