@@ -24,7 +24,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 🖼️ Logo
-st.image("assets/logo.png", use_container_width=True)
+st.image("assets/Logo.png", use_container_width=True)
 
 st.set_page_config(page_title="XRP Painel", layout="wide")
 st.title("💰 XRP Painel")
