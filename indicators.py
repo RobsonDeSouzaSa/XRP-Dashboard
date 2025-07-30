@@ -1,5 +1,6 @@
 import pandas as pd
 import pandas_ta as ta
+from numpy import nan as npNaN
 
 def load_price_data():
     try:
