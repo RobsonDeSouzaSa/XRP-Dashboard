@@ -7,6 +7,15 @@ from utils import compactar_data_json
 from datetime import datetime
 import json
 
+hide_streamlit_style = """
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 st.set_page_config(page_title="XRP Painel", layout="wide")
 st.title("💰 XRP Painel")
 
@@ -91,14 +100,3 @@ with col3:
     fig_macd.add_trace(go.Scatter(x=df["timestamp"], y=df["macd"], mode="lines", name="MACD"))
     fig_macd.update_layout(title="📈 MACD", template="plotly_dark")
     st.plotly_chart(fig_macd, use_container_width=True)
-
-hide_streamlit_style = """
-    <style>
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        header {visibility: hidden;}
-    </style>
-"""
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
-
