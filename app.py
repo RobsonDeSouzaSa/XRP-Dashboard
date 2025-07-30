@@ -92,3 +92,13 @@ with col3:
     fig_macd.update_layout(title="📈 MACD", template="plotly_dark")
     st.plotly_chart(fig_macd, use_container_width=True)
 
+hide_streamlit_style = """
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+
