@@ -1,0 +1,10 @@
+ 	xrp_dashboard/
+│
+├── app.py
+├── dashboard.py
+├── indicators.py
+├── services.py
+├── requirements.txt
+├── data.json
+├── assets/
+│   └── custom.css
