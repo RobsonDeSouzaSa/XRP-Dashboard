@@ -1,4 +1,5 @@
 import streamlit as st
+from indicators import load_price_data, compute_indicators
 from services import fetch_xrp_price, fetch_xrp_usd
 
 st.title("Monitor de Cotação XRP 🪙")
