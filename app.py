@@ -18,10 +18,13 @@ st.markdown("""
 
 # ✅ Cabeçalho personalizado do dashboard
 st.markdown("""
-    <h1 style='text-align: center; color: #00CED1; font-family: Arial; margin-bottom: 20px;'>
+    <h1 style='text-align: center; color: #00CED1; font-family: Arial; margin-bottom: 10px;'>
         XRP Dashboard 💸📈
     </h1>
 """, unsafe_allow_html=True)
+
+# 🖼️ Logo
+st.image("assets/logo.png", use_column_width=True)
 
 st.set_page_config(page_title="XRP Painel", layout="wide")
 st.title("💰 XRP Painel")
