@@ -1,6 +1,10 @@
-streamlit
-pandas
-plotly
-pandas-ta
+streamlit>=1.26.0
+pandas>=1.5.0
+plotly>=5.13.0
+pandas-ta>=0.3.14b0
 numpy==1.26.4
-setuptools
+setuptools>=65.5.1
+
+# APIs ou manipulação extra (opcional, mas útil)
+requests>=2.31.0
+
