@@ -18,12 +18,13 @@ st.markdown("""
             left: 0;
             bottom: 0;
             width: 100%;
-            background-color: #f0f2f6;
-            color: #333;
+            background-color: #0f1117;  /* fundo escuro */
+            color: #00ffcc;             /* texto verde neon */
             text-align: center;
             padding: 10px;
             font-size: 14px;
             font-family: 'Source Sans Pro', sans-serif;
+            border-top: 1px solid #00ffcc;
         }
     </style>
     <div class="custom-footer">
