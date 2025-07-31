@@ -30,7 +30,7 @@ st.set_page_config(page_title="XRP Dashboard", layout="wide")
 # Centraliza e ajusta a logo
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("assets/logo.png", width=80)  # Tamanho ideal entre 60 e 100
+    st.image("assets/Logo.png", width=80)  # Tamanho ideal entre 60 e 100
 
 # Estilo adicional com CSS (opcional)
 st.markdown(
