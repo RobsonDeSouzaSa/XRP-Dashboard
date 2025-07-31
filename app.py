@@ -16,35 +16,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Configura a página
-st.set_page_config(
-    page_title="XRP Dashboard",
-    page_icon="assets/logo.png",  # Ícone da aba
-    layout="wide"
-)
-
-# Esconde elementos padrão do Streamlit
-st.markdown("""
-    <style>
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        header {visibility: hidden;}
-    </style>
-""", unsafe_allow_html=True)
-
-# 🎯 Exibe a logo centralizada e maior
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.image("assets/Logo.png", width=200)  # Ajuste o valor conforme necessário
-
-# 🏷️ Título principal do dashboard
+# ✅ Cabeçalho personalizado do dashboard
 st.markdown("""
     <h1 style='text-align: center; color: #00CED1; font-family: Arial; margin-bottom: 10px;'>
         XRP Dashboard 💸📈
     </h1>
-""", unsafe_allow_html=True
- 
-)
+""", unsafe_allow_html=True)
+
+# 🖼️ Logo
+st.image("assets/Logo.png", use_column_width=True)
 
 st.set_page_config(page_title="XRP Painel", layout="wide")
 st.title("💰 XRP Painel")
