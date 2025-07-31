@@ -13,18 +13,24 @@ st.markdown("""
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
+
         .custom-footer {
             position: fixed;
             left: 0;
             bottom: 0;
             width: 100%;
-            background-color: #0f1117;  /* fundo escuro */
-            color: #00ffcc;             /* texto verde neon */
+            background-color: #0f1117;
+            color: #00ffcc;
             text-align: center;
-            padding: 10px;
+            padding: 12px;
             font-size: 14px;
             font-family: 'Source Sans Pro', sans-serif;
             border-top: 1px solid #00ffcc;
+            box-shadow: 0px -2px 10px rgba(0, 255, 204, 0.4);
+        }
+
+        .custom-footer strong {
+            text-shadow: 0 0 6px #00ffcc, 0 0 10px #00ffcc;
         }
     </style>
     <div class="custom-footer">
