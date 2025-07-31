@@ -42,7 +42,7 @@ st.markdown("""
 # 🎯 Exibe a logo centralizada e maior
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("assets/logo.png", width=150)  # Ajuste o valor conforme necessário
+    st.image("assets/Logo.png", width=150)  # Ajuste o valor conforme necessário
 
 # 🏷️ Título principal do dashboard
 st.markdown("""
