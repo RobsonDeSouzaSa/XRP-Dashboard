@@ -11,10 +11,26 @@ import json
 st.markdown("""
     <style>
         #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}     /* Oculta o rodapé padrão */
+        footer {visibility: hidden;}
         header {visibility: hidden;}
+        .custom-footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #f0f2f6;
+            color: #333;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
     </style>
+    <div class="custom-footer">
+        Painel desenvolvido por <strong>Robson</strong> | Versão 1.0 🚀
+    </div>
 """, unsafe_allow_html=True)
+
 
 # ✅ Cabeçalho personalizado do dashboard
 st.markdown("""
