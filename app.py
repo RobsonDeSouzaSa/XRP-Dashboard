@@ -34,8 +34,10 @@ st.markdown("""
 
 # ✅ Cabeçalho personalizado do dashboard
 
+
+
 st.set_page_config(page_title="XRP Painel", layout="wide")
-st.title("💰 XRP Painel")
+st.title("💰 XRP Painel 💸📈")
 
 quantidade_xrp = st.number_input("Digite a quantidade de XRP", min_value=0.0, step=0.01)
 
