@@ -158,16 +158,6 @@ try:
 except Exception as e:
     st.warning(f"⚠️ Erro ao calcular indicadores técnicos: {e}")
 
-
-
-
-
-
-
-
-
-
-
 # 🧠 Rodapé personalizado
 st.markdown("""
     <style>
