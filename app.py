@@ -33,11 +33,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ✅ Cabeçalho personalizado do dashboard
-st.markdown("""
-    <h1 style='text-align: center; color: #00CED1; font-family: Arial; margin-bottom: 10px;'>
-        XRP Painel 💸📈
-    </h1>
-""", unsafe_allow_html=True)
+
+st.set_page_config(page_title="XRP Painel", layout="wide")
+st.title("💰 XRP Painel")
 
 quantidade_xrp = st.number_input("Digite a quantidade de XRP", min_value=0.0, step=0.01)
 
