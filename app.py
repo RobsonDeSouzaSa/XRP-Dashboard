@@ -16,6 +16,24 @@ st_autorefresh(interval=60 * 1000, key="painel_xrp")
 st.set_page_config(page_title="Painel XRP em Tempo Real", layout="wide")
 st.title("💰 Painel XRP com Dados em Tempo Real 📈")
 
+# 🌑 Estilo personalizado para tema escuro tech
+st.markdown("""
+    <style>
+        body {
+            color: #e0e0e0;
+            background-color: #0f1117;
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #00ffe1;
+        }
+        .stTextInput > div > div > input {
+            background-color: #1c1c1c;
+            color: #00ffcc;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 # 🧮 Entrada formatada
 def formatar_quantidade(valor_str):
     valor_str = valor_str.replace(".", "").replace(",", ".")
@@ -42,7 +60,7 @@ if price_brl is None or price_usd is None:
     st.error("⚠️ Não foi possível obter o preço atual do XRP.")
     st.stop()
 
-# 📈 Métricas
+# 📈 Métricas com cores de destaque
 cor_valor = "lime" if percent >= 0 else "#FF4500"
 st.metric(label="Preço atual do XRP (BRL)", value=f"R$ {price_brl:.2f}", delta=f"{percent:.2f}%")
 st.metric(label="Preço atual do XRP (USD)", value=f"US$ {price_usd:.2f}")
@@ -105,7 +123,7 @@ try:
 except Exception as e:
     st.warning(f"⚠️ Erro ao carregar histórico USD: {e}")
 
-# ⚙️ Indicadores baseados em histórico BRL
+# ⚙️ Indicadores técnicos baseados em histórico BRL
 try:
     with open("data.json", "r") as f:
         historico_brl = pd.DataFrame(json.load(f))
@@ -113,16 +131,16 @@ try:
         historico_brl.set_index("timestamp", inplace=True)
         historico_brl.sort_index(inplace=True)
 
-    # 📈 Calcular RSI
+    # 📈 RSI
     rsi = RSIIndicator(close=historico_brl["price"], window=14)
     historico_brl["RSI"] = rsi.rsi()
 
-    # 📉 Calcular MACD
+    # 📉 MACD
     macd = MACD(close=historico_brl["price"])
     historico_brl["MACD"] = macd.macd()
     historico_brl["MACD_SIGNAL"] = macd.macd_signal()
 
-    # 🔁 Calcular EMA (ex: 9 períodos)
+    # 🔁 EMA
     ema = EMAIndicator(close=historico_brl["price"], window=9)
     historico_brl["EMA"] = ema.ema_indicator()
 
@@ -146,7 +164,7 @@ try:
     )
     st.plotly_chart(fig_macd, use_container_width=True)
 
-    # 🖼️ Gráfico EMA + preço
+    # 🖼️ Gráfico EMA + Preço
     fig_ema = px.line(
         historico_brl.reset_index(),
         x="timestamp", y=["price", "EMA"],
@@ -171,7 +189,7 @@ st.markdown("""
             text-align: center;
             padding: 10px;
             font-size: 14px;
-            font-family: 'Source Sans Pro', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             border-top: 1px solid #00ffcc;
         }
     </style>
