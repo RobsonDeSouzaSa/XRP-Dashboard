@@ -24,19 +24,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 🖼️ Logo
-# Centraliza a logo usando colunas
+# Configurações da página
+st.set_page_config(page_title="XRP Dashboard", layout="wide")
+
+# Centraliza e ajusta a logo
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("assets/Logo.png", width=100)  # Você pode testar com 80, 100, 120...
+    st.image("assets/logo.png", width=80)  # Tamanho ideal entre 60 e 100
 
-# Aplica estilo adicional via CSS
+# Estilo adicional com CSS (opcional)
 st.markdown(
     """
     <style>
     .logo {
         display: block;
-        margin-left: auto;
-        margin-right: auto;
+        margin: 0 auto;
         width: 80px;
     }
     </style>
