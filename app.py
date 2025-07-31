@@ -16,13 +16,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ✅ Cabeçalho personalizado do dashboard
-st.markdown("""
-    <h1 style='text-align: center; color: #00CED1; font-family: Arial; margin-bottom: 10px;'>
-        XRP Dashboard 💸📈
-    </h1>
-""", unsafe_allow_html=True)
-
 # Configura a página
 st.set_page_config(
     page_title="XRP Dashboard",
