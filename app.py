@@ -24,7 +24,26 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 🖼️ Logo
-st.image("assets/Logo.png", use_container_width=True)
+# Centraliza a logo usando colunas
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("assets/Logo.png", width=100)  # Você pode testar com 80, 100, 120...
+
+# Aplica estilo adicional via CSS
+st.markdown(
+    """
+    <style>
+    .logo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 80px;
+    }
+    </style>
+    <img src="assets/logo.png" class="logo">
+    """,
+    unsafe_allow_html=True
+)
 
 st.set_page_config(page_title="XRP Painel", layout="wide")
 st.title("💰 XRP Painel")
