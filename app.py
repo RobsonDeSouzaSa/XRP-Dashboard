@@ -31,7 +31,7 @@ df["macd_signal"] = df["macd"].ewm(span=9, adjust=False).mean()
 df["bb_upper"] = df["price"].rolling(20).mean() + 2 * df["price"].rolling(20).std()
 df["bb_lower"] = df["price"].rolling(20).mean() - 2 * df["price"].rolling(20).std()
 
-# 🧮 Simulação de valores atuais (substitua com fetch_xrp_price e fetch_xrp_usd reais!)
+# Simulação de valores atuais (substitua com fetch_xrp_price e fetch_xrp_usd reais!)
 price = df["price"].iloc[-1]
 price_usd = round(price / 4.9, 2)  # simulação
 percent = round((price - df["price"].iloc[-2]) / df["price"].iloc[-2] * 100, 2)
@@ -45,10 +45,26 @@ if price is None or df.empty or "price" not in df.columns:
 st.set_page_config(page_title="Painel XRP", layout="wide")
 st.title("💰 Painel XRP com Indicadores Técnicos 📊")
 
-# 🎛️ Quantidade de XRP
-quantidade_xrp = st.number_input("Digite a quantidade de XRP", min_value=0.0, step=0.01)
+# Função para formatar entrada com vírgulas
+def formatar_quantidade(valor_str):
+    valor_str = valor_str.replace(".", "").replace(",", ".")
+    try:
+        valor_float = float(valor_str)
+        return f"{valor_float:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    except:
+        return valor_str
 
-# 🎯 Métricas de preço
+# Entrada formatada
+quantidade_str = st.text_input("Digite a quantidade de XRP", value="0,00")
+quantidade_formatada = formatar_quantidade(quantidade_str)
+st.write(f"🧮 Quantidade formatada: **{quantidade_formatada} XRP**")
+
+try:
+    quantidade_xrp = float(quantidade_str.replace(".", "").replace(",", "."))
+except:
+    quantidade_xrp = 0.0
+
+# Métricas de preço
 cor_valor = "lime" if percent >= 0 else "#FF4500"
 st.metric(label="Preço atual do XRP", value=f"R$ {price:.2f}", delta=f"{percent:.2f}%")
 
@@ -64,14 +80,14 @@ if quantidade_xrp:
     total_usd = quantidade_xrp * price_usd
     st.markdown(f"💵 **{quantidade_xrp:.2f} XRP ≈ US$ {total_usd:,.2f}**")
 
-# 📅 Filtro de datas
+# Filtro de datas
 min_date = df.index.min()
 max_date = df.index.max()
 start_date = st.sidebar.date_input("Data inicial", min_value=min_date, max_value=max_date, value=min_date)
 end_date = st.sidebar.date_input("Data final", min_value=min_date, max_value=max_date, value=max_date)
 df_filtered = df.loc[start_date:end_date]
 
-# 📈 Gráfico de Preço + EMA + Bollinger Bands
+# Gráfico de Preço + EMA + Bollinger Bands
 fig_price = go.Figure()
 fig_price.add_trace(go.Scatter(x=df_filtered.index, y=df_filtered["price"], mode="lines", name="Preço", line=dict(color="blue"), hovertemplate="Data: %{x}<br>Preço: R$ %{y:.2f}"))
 fig_price.add_trace(go.Scatter(x=df_filtered.index, y=df_filtered["ema"], mode="lines", name="EMA", line=dict(color="orange", dash="dot"), hovertemplate="Data: %{x}<br>EMA: R$ %{y:.2f}"))
@@ -80,7 +96,7 @@ fig_price.add_trace(go.Scatter(x=df_filtered.index, y=df_filtered["bb_lower"], m
 fig_price.update_layout(title="📈 Preço do XRP com EMA e Bollinger Bands", template="plotly_dark")
 st.plotly_chart(fig_price, use_container_width=True)
 
-# 🧭 Gráfico RSI
+# Gráfico RSI
 fig_rsi = go.Figure()
 fig_rsi.add_trace(go.Scatter(x=df_filtered.index, y=df_filtered["rsi"], mode="lines", name="RSI", line=dict(color="cyan"), hovertemplate="Data: %{x}<br>RSI: %{y:.2f}"))
 fig_rsi.add_shape(type="line", x0=df_filtered.index[0], x1=df_filtered.index[-1], y0=70, y1=70, line=dict(color="red", dash="dot"))
@@ -88,7 +104,7 @@ fig_rsi.add_shape(type="line", x0=df_filtered.index[0], x1=df_filtered.index[-1]
 fig_rsi.update_layout(title="🧭 RSI (Índice de Força Relativa)", template="plotly_dark", yaxis=dict(range=[0, 100]))
 st.plotly_chart(fig_rsi, use_container_width=True)
 
-# 📉 Gráfico MACD
+# Gráfico MACD
 fig_macd = go.Figure()
 fig_macd.add_trace(go.Scatter(x=df_filtered.index, y=df_filtered["macd"], mode="lines", name="MACD", line=dict(color="magenta"), hovertemplate="Data: %{x}<br>MACD: %{y:.2f}"))
 fig_macd.add_trace(go.Scatter(x=df_filtered.index, y=df_filtered["macd_signal"], mode="lines", name="Sinal", line=dict(color="yellow")))
@@ -96,13 +112,13 @@ fig_macd.add_shape(type="line", x0=df_filtered.index[0], x1=df_filtered.index[-1
 fig_macd.update_layout(title="📉 MACD", template="plotly_dark")
 st.plotly_chart(fig_macd, use_container_width=True)
 
-# 📦 Volume
+# Gráfico Volume
 fig_vol = go.Figure()
 fig_vol.add_trace(go.Bar(x=df_filtered.index, y=df_filtered["volume"], name="Volume", marker_color="gray", hovertemplate="Data: %{x}<br>Volume: %{y}"))
 fig_vol.update_layout(title="📦 Volume negociado", template="plotly_dark")
 st.plotly_chart(fig_vol, use_container_width=True)
 
-# 🔻 Rodapé
+# Rodapé personalizado
 st.markdown("""
     <style>
         .custom-footer {
@@ -120,6 +136,6 @@ st.markdown("""
         }
     </style>
     <div class="custom-footer">
-        Painel desenvolvido por <strong>Robson</strong> | Versão 2.1 🚀
+        Painel desenvolvido por <strong>Robson</strong> | Versão 2.2 🚀
     </div>
 """, unsafe_allow_html=True)
