@@ -13,31 +13,24 @@ st.markdown("""
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
-
         .custom-footer {
             position: fixed;
             left: 0;
             bottom: 0;
             width: 100%;
-            background-color: #0f1117;
-            color: #00ffcc;
+            background-color: #0f1117;  /* fundo escuro */
+            color: #00ffcc;             /* texto verde neon */
             text-align: center;
-            padding: 12px;
+            padding: 10px;
             font-size: 14px;
             font-family: 'Source Sans Pro', sans-serif;
             border-top: 1px solid #00ffcc;
-            box-shadow: 0px -2px 10px rgba(0, 255, 204, 0.4);
-        }
-
-        .custom-footer strong {
-            text-shadow: 0 0 6px #00ffcc, 0 0 10px #00ffcc;
         }
     </style>
     <div class="custom-footer">
         Painel desenvolvido por <strong>Robson</strong> | Versão 1.0 🚀
     </div>
 """, unsafe_allow_html=True)
-
 
 # ✅ Cabeçalho personalizado do dashboard
 st.markdown("""
