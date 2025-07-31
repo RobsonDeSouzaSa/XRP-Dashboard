@@ -23,11 +23,6 @@ st.markdown("""
     </h1>
 """, unsafe_allow_html=True)
 
-# 🖼️ Logo
-col1, col2, col3 = st.columns([1, 2, 1])
-with col3:
-    st.image("assets/Logo.png", width=120)  # ajuste entre 100 e 140 para diferentes tamanhos
-
 st.set_page_config(page_title="XRP Painel", layout="wide")
 st.title("💰 XRP Painel")
 
