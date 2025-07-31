@@ -5,6 +5,8 @@ import plotly.express as px
 from datetime import datetime
 from services import fetch_xrp_price, fetch_xrp_usd
 from streamlit_autorefresh import st_autorefresh
+from ta.momentum import RSIIndicator
+from ta.trend import MACD, EMAIndicator
 import json
 
 # 🔄 Atualiza a cada 60 segundos
@@ -102,6 +104,69 @@ try:
     st.plotly_chart(fig_hist_usd, use_container_width=True)
 except Exception as e:
     st.warning(f"⚠️ Erro ao carregar histórico USD: {e}")
+
+# ⚙️ Indicadores baseados em histórico BRL
+try:
+    with open("data.json", "r") as f:
+        historico_brl = pd.DataFrame(json.load(f))
+        historico_brl["timestamp"] = pd.to_datetime(historico_brl["timestamp"])
+        historico_brl.set_index("timestamp", inplace=True)
+        historico_brl.sort_index(inplace=True)
+
+    # 📈 Calcular RSI
+    rsi = RSIIndicator(close=historico_brl["price"], window=14)
+    historico_brl["RSI"] = rsi.rsi()
+
+    # 📉 Calcular MACD
+    macd = MACD(close=historico_brl["price"])
+    historico_brl["MACD"] = macd.macd()
+    historico_brl["MACD_SIGNAL"] = macd.macd_signal()
+
+    # 🔁 Calcular EMA (ex: 9 períodos)
+    ema = EMAIndicator(close=historico_brl["price"], window=9)
+    historico_brl["EMA"] = ema.ema_indicator()
+
+    # 🖼️ Gráfico RSI
+    fig_rsi = px.line(
+        historico_brl.reset_index(),
+        x="timestamp", y="RSI",
+        title="📊 RSI - Índice de Força Relativa (BRL)",
+        markers=True, template="plotly_dark"
+    )
+    fig_rsi.add_hline(y=70, line_dash="dot", line_color="red")
+    fig_rsi.add_hline(y=30, line_dash="dot", line_color="green")
+    st.plotly_chart(fig_rsi, use_container_width=True)
+
+    # 🖼️ Gráfico MACD
+    fig_macd = px.line(
+        historico_brl.reset_index(),
+        x="timestamp", y=["MACD", "MACD_SIGNAL"],
+        title="📉 MACD & MACD Signal (BRL)",
+        markers=True, template="plotly_dark"
+    )
+    st.plotly_chart(fig_macd, use_container_width=True)
+
+    # 🖼️ Gráfico EMA + preço
+    fig_ema = px.line(
+        historico_brl.reset_index(),
+        x="timestamp", y=["price", "EMA"],
+        title="📈 Preço vs EMA (BRL)",
+        markers=True, template="plotly_dark"
+    )
+    st.plotly_chart(fig_ema, use_container_width=True)
+
+except Exception as e:
+    st.warning(f"⚠️ Erro ao calcular indicadores técnicos: {e}")
+
+
+
+
+
+
+
+
+
+
 
 # 🧠 Rodapé personalizado
 st.markdown("""
