@@ -187,14 +187,15 @@ try:
     fig_macd.update_layout(dragmode="pan", hovermode="x unified")
     st.plotly_chart(fig_macd, use_container_width=True)
 
-       fig_ema = px.line(
-        historico_brl.reset_index(),
-        x="timestamp", y=["price", "EMA"],
-        title=f"📈 Preço vs EMA (BRL) ({periodo})",
-        markers=True,
-        template="plotly_dark",
-        color_discrete_sequence=["#1E90FF", "#FFD700"]
+    fig_ema = px.line(
+       historico_brl.reset_index(),
+       x="timestamp", y=["price", "EMA"],
+       title=f"📈 Preço vs EMA (BRL) ({periodo})",
+       markers=True,
+       template="plotly_dark",
+       color_discrete_sequence=["#1E90FF", "#FFD700"]
     )
+   
     fig_ema.update_layout(
         dragmode="pan",
         hovermode="x unified"
@@ -227,3 +228,4 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
     
+
