@@ -14,6 +14,12 @@ st_autorefresh(interval=60 * 1000, key="painel_xrp")
 
 # 📋 Configuração do painel
 st.set_page_config(page_title="Painel XRP em Tempo Real", layout="wide")
+
+# 🌐 Meta tag para definir idioma como português do Brasil
+st.markdown("""
+    <meta http-equiv="Content-Language" content="pt-br">
+""", unsafe_allow_html=True)
+
 st.title("💰 Painel XRP com Dados em Tempo Real 📈")
 
 # 🌑 Estilo personalizado para tema escuro tech
@@ -228,4 +234,5 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
     
+
 
