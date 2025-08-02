@@ -9,7 +9,7 @@ from ta.momentum import RSIIndicator
 from ta.trend import MACD, EMAIndicator
 import json
 
-# 🔄 Atualiza a cada 60 segundos
+# 🔁 Atualiza a cada 60 segundos
 st_autorefresh(interval=60 * 1000, key="painel_xrp")
 
 # 📋 Configuração do painel
@@ -72,6 +72,16 @@ if quantidade_xrp:
     st.markdown(f"🟢 **{quantidade_xrp:.2f} XRP ≈ R$ {total_brl:,.2f}**")
     st.markdown(f"💵 **{quantidade_xrp:.2f} XRP ≈ US$ {total_usd:,.2f}**")
 
+# 📅 Seleção de período customizável
+periodo = st.selectbox("Selecione o período para análise", options=["7 dias", "30 dias", "90 dias", "Todos"])
+
+def filtrar_periodo(df, dias):
+    if dias == "Todos":
+        return df
+    dias_num = int(dias.split()[0])
+    data_limite = datetime.now() - pd.Timedelta(days=dias_num)
+    return df[df["timestamp"] >= data_limite]
+
 # 📊 Indicador BRL
 fig_brl = go.Figure(go.Indicator(
     mode="number+delta",
@@ -89,9 +99,11 @@ try:
         historico_brl = pd.DataFrame(json.load(f))
         historico_brl["timestamp"] = pd.to_datetime(historico_brl["timestamp"])
 
+    historico_brl = filtrar_periodo(historico_brl, periodo)
+
     fig_hist_brl = px.line(
         historico_brl, x="timestamp", y="price",
-        title="📈 Histórico de XRP em BRL",
+        title=f"📈 Histórico de XRP em BRL ({periodo})",
         markers=True, template="plotly_dark"
     )
     fig_hist_brl.update_layout(
@@ -109,9 +121,11 @@ try:
         historico_usd = pd.DataFrame(json.load(f))
         historico_usd["timestamp"] = pd.to_datetime(historico_usd["timestamp"])
 
+    historico_usd = filtrar_periodo(historico_usd, periodo)
+
     fig_hist_usd = px.line(
         historico_usd, x="timestamp", y="price",
-        title="🌍 Histórico de XRP em USD",
+        title=f"🌍 Histórico de XRP em USD ({periodo})",
         markers=True, template="plotly_dark"
     )
     fig_hist_usd.update_layout(
@@ -130,6 +144,7 @@ try:
         historico_brl["timestamp"] = pd.to_datetime(historico_brl["timestamp"])
         historico_brl.set_index("timestamp", inplace=True)
         historico_brl.sort_index(inplace=True)
+        historico_brl = filtrar_periodo(historico_brl.reset_index(), periodo).set_index("timestamp")
 
     # 📈 RSI
     rsi = RSIIndicator(close=historico_brl["price"], window=14)
@@ -148,7 +163,7 @@ try:
     fig_rsi = px.line(
         historico_brl.reset_index(),
         x="timestamp", y="RSI",
-        title="📊 RSI - Índice de Força Relativa (BRL)",
+        title=f"📊 RSI - Índice de Força Relativa (BRL) ({periodo})",
         markers=True, template="plotly_dark"
     )
     fig_rsi.add_hline(y=70, line_dash="dot", line_color="red")
@@ -159,7 +174,7 @@ try:
     fig_macd = px.line(
         historico_brl.reset_index(),
         x="timestamp", y=["MACD", "MACD_SIGNAL"],
-        title="📉 MACD & MACD Signal (BRL)",
+        title=f"📉 MACD & MACD Signal (BRL) ({periodo})",
         markers=True, template="plotly_dark"
     )
     st.plotly_chart(fig_macd, use_container_width=True)
@@ -168,7 +183,7 @@ try:
     fig_ema = px.line(
         historico_brl.reset_index(),
         x="timestamp", y=["price", "EMA"],
-        title="📈 Preço vs EMA (BRL)",
+        title=f"📈 Preço vs EMA (BRL) ({periodo})",
         markers=True, template="plotly_dark"
     )
     st.plotly_chart(fig_ema, use_container_width=True)
@@ -197,3 +212,4 @@ st.markdown("""
         Painel desenvolvido por <strong>Robson</strong> | Versão 3.3 🚀 com gráficos interativos + atualização automática ⏱️
     </div>
 """, unsafe_allow_html=True)
+
