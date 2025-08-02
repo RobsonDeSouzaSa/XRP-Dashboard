@@ -98,18 +98,20 @@ try:
     with open("data.json", "r") as f:
         historico_brl = pd.DataFrame(json.load(f))
         historico_brl["timestamp"] = pd.to_datetime(historico_brl["timestamp"])
-
-    historico_brl = filtrar_periodo(historico_brl, periodo)
+        historico_brl = filtrar_periodo(historico_brl, periodo)
 
     fig_hist_brl = px.line(
         historico_brl, x="timestamp", y="price",
         title=f"📈 Histórico de XRP em BRL ({periodo})",
-        markers=True, template="plotly_dark"
+        markers=True, template="plotly_dark",
+        color_discrete_sequence=["#00ffe1"]
     )
     fig_hist_brl.update_layout(
         yaxis_title="Preço (BRL)",
         xaxis_title="Data",
-        xaxis_rangeslider_visible=True
+        xaxis_rangeslider_visible=True,
+        dragmode="pan",
+        hovermode="x unified"
     )
     st.plotly_chart(fig_hist_brl, use_container_width=True)
 except Exception as e:
@@ -120,18 +122,20 @@ try:
     with open("xrp_usd_data.json", "r") as f:
         historico_usd = pd.DataFrame(json.load(f))
         historico_usd["timestamp"] = pd.to_datetime(historico_usd["timestamp"])
-
-    historico_usd = filtrar_periodo(historico_usd, periodo)
+        historico_usd = filtrar_periodo(historico_usd, periodo)
 
     fig_hist_usd = px.line(
         historico_usd, x="timestamp", y="price",
         title=f"🌍 Histórico de XRP em USD ({periodo})",
-        markers=True, template="plotly_dark"
+        markers=True, template="plotly_dark",
+        color_discrete_sequence=["#FFD700"]
     )
     fig_hist_usd.update_layout(
         yaxis_title="Preço (USD)",
         xaxis_title="Data",
-        xaxis_rangeslider_visible=True
+        xaxis_rangeslider_visible=True,
+        dragmode="pan",
+        hovermode="x unified"
     )
     st.plotly_chart(fig_hist_usd, use_container_width=True)
 except Exception as e:
@@ -146,45 +150,54 @@ try:
         historico_brl.sort_index(inplace=True)
         historico_brl = filtrar_periodo(historico_brl.reset_index(), periodo).set_index("timestamp")
 
-    # 📈 RSI
+    # RSI
     rsi = RSIIndicator(close=historico_brl["price"], window=14)
     historico_brl["RSI"] = rsi.rsi()
 
-    # 📉 MACD
+    # MACD
     macd = MACD(close=historico_brl["price"])
     historico_brl["MACD"] = macd.macd()
     historico_brl["MACD_SIGNAL"] = macd.macd_signal()
 
-    # 🔁 EMA
+    # EMA
     ema = EMAIndicator(close=historico_brl["price"], window=9)
     historico_brl["EMA"] = ema.ema_indicator()
 
-    # 🖼️ Gráfico RSI
     fig_rsi = px.line(
         historico_brl.reset_index(),
         x="timestamp", y="RSI",
         title=f"📊 RSI - Índice de Força Relativa (BRL) ({periodo})",
-        markers=True, template="plotly_dark"
+        markers=True,
+        template="plotly_dark",
+        color_discrete_sequence=["#8A2BE2"]
     )
     fig_rsi.add_hline(y=70, line_dash="dot", line_color="red")
     fig_rsi.add_hline(y=30, line_dash="dot", line_color="green")
+    fig_rsi.update_layout(dragmode="pan", hovermode="x unified")
     st.plotly_chart(fig_rsi, use_container_width=True)
 
-    # 🖼️ Gráfico MACD
     fig_macd = px.line(
         historico_brl.reset_index(),
         x="timestamp", y=["MACD", "MACD_SIGNAL"],
         title=f"📉 MACD & MACD Signal (BRL) ({periodo})",
-        markers=True, template="plotly_dark"
+        markers=True,
+        template="plotly_dark",
+        color_discrete_sequence=["#FF4500", "#00ffcc"]
     )
+    fig_macd.update_layout(dragmode="pan", hovermode="x unified")
     st.plotly_chart(fig_macd, use_container_width=True)
 
-    # 🖼️ Gráfico EMA + Preço
-    fig_ema = px.line(
+       fig_ema = px.line(
         historico_brl.reset_index(),
         x="timestamp", y=["price", "EMA"],
         title=f"📈 Preço vs EMA (BRL) ({periodo})",
-        markers=True, template="plotly_dark"
+        markers=True,
+        template="plotly_dark",
+        color_discrete_sequence=["#1E90FF", "#FFD700"]
+    )
+    fig_ema.update_layout(
+        dragmode="pan",
+        hovermode="x unified"
     )
     st.plotly_chart(fig_ema, use_container_width=True)
 
@@ -213,3 +226,4 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
+    
