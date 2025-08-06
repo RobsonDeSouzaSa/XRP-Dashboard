@@ -7,7 +7,7 @@ USD_EXPIRATION = 10 * 60   # 10 minutos para USD
 _cache = {"price": None, "timestamp": 0}
 usd_cache = {"price": None, "timestamp": 0}
 
-# 💰 Função principal: busca cotação XRP em BRL com média ponderada
+# 💰 Função principal: busca cotação XRP em BRL
 def fetch_xrp_price():
     global _cache
     current_time = time.time()
@@ -15,30 +15,19 @@ def fetch_xrp_price():
     if _cache["price"] and (current_time - _cache["timestamp"] < CACHE_EXPIRATION):
         price = _cache["price"]
     else:
-        # 🌐 Fontes BRL e seus pesos
-        fontes = {
-            from_binance: 0.5,
-            from_coinpaprika: 0.3,
-            from_coingecko: 0.2
-        }
-
-        valores_ponderados = []
-        pesos_validos = []
-
-        for fonte, peso in fontes.items():
+        price = None
+        fontes = [from_binance, from_coinpaprika, from_coingecko]
+        for fonte in fontes:
             try:
-                valor = fonte()
-                if valor:
-                    valores_ponderados.append(valor * peso)
-                    pesos_validos.append(peso)
+                price = fonte()
+                if price:
+                    _cache["price"] = price
+                    _cache["timestamp"] = current_time
+                    break
             except Exception as e:
                 print(f"⚠️ Erro {fonte.__name__}:", e)
 
-        if valores_ponderados:
-            price = sum(valores_ponderados) / sum(pesos_validos)
-            _cache["price"] = price
-            _cache["timestamp"] = current_time
-        else:
+        if not price:
             return None, None
 
     timestamp = datetime.now().isoformat()
@@ -69,7 +58,7 @@ def fetch_xrp_price():
 
     return price, percent
 
-# 💵 Cotação USD com média ponderada
+# 💵 Cotação USD com múltiplas fontes + cache + histórico
 def fetch_xrp_usd():
     global usd_cache
     current_time = time.time()
@@ -77,32 +66,21 @@ def fetch_xrp_usd():
     if usd_cache["price"] and (current_time - usd_cache["timestamp"] < USD_EXPIRATION):
         return usd_cache["price"]
 
-    fontes_usd = {
-        usd_from_coinpaprika: 0.4,
-        usd_from_coingecko: 0.4,
-        usd_from_messari: 0.2
-    }
+    price_usd = None
+    fontes_usd = [usd_from_coinpaprika, usd_from_coingecko, usd_from_messari]
 
-    valores_usd = []
-    pesos_usd = []
-
-    for fonte, peso in fontes_usd.items():
+    for fonte in fontes_usd:
         try:
-            valor = fonte()
-            if valor:
-                valores_usd.append(valor * peso)
-                pesos_usd.append(peso)
+            price_usd = fonte()
+            if price_usd:
+                usd_cache["price"] = price_usd
+                usd_cache["timestamp"] = current_time
+                salvar_historico_usd(price_usd)
+                break
         except Exception as e:
             print(f"⚠️ Erro {fonte.__name__}:", e)
 
-    if valores_usd:
-        price_usd = sum(valores_usd) / sum(pesos_usd)
-        usd_cache["price"] = price_usd
-        usd_cache["timestamp"] = current_time
-        salvar_historico_usd(price_usd)
-        return price_usd
-
-    return None
+    return price_usd
 
 # 🌐 Fontes BRL
 def from_binance():
@@ -163,3 +141,4 @@ def salvar_historico_usd(price_usd):
             json.dump(historico_usd, f, indent=2)
     except Exception as e:
         print("⚠️ Erro ao salvar histórico USD:", e)
+
