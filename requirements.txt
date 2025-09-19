@@ -1,4 +1,5 @@
 streamlit>=1.26.0
+plotly
 pandas>=1.5.0
 plotly>=5.13.0
 pandas-ta>=0.3.14b0
@@ -8,4 +9,5 @@ streamlit-autorefresh
 ta
 # APIs ou manipulação extra (opcional, mas útil)
 requests>=2.31.0
+
 
